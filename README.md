@@ -5,29 +5,29 @@
 ## Demo
 
 Watch the demo:
-[demo.mp4](assets/readme/demo.mp4)
+[demo.mp4](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/demo.mp4)
 
 Click the image below to open the video:
 
-[![Pass Manager demo](assets/readme/tui-hidden-password.png)](assets/readme/demo.mp4)
+[![Pass Manager demo](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/tui-hidden-password.png)](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/demo.mp4)
 
 ### Screenshots
 
 #### Master password prompt
 
-![Master password prompt](assets/readme/master-password-prompt.png)
+![Master password prompt](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/master-password-prompt.png)
 
 #### TUI with hidden password
 
-![TUI with hidden password](assets/readme/tui-hidden-password.png)
+![TUI with hidden password](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/tui-hidden-password.png)
 
 #### TUI with revealed password
 
-![TUI with revealed password](assets/readme/tui-revealed-password.png)
+![TUI with revealed password](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/tui-revealed-password.png)
 
 #### Test suite passing
 
-![Cargo test suite passing](assets/readme/cargo-test-passing.png)
+![Cargo test suite passing](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/cargo-test-passing.png)
 
 ## Why This Project Stands Out
 
@@ -153,7 +153,7 @@ Security UX:
 
 ## Vault Format
 
-The on-disk vault is a single encrypted JSON document with a flat, explicit schem
+The on-disk vault is a single encrypted JSON document with a flat, explicit schema:
 
 ```json
 {
