@@ -1,7 +1,7 @@
 pub mod entry;
 pub mod store;
 
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
@@ -13,7 +13,7 @@ pub use store::{VaultStatus, VaultStore};
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Vault {
     #[serde(default)]
-    pub(crate) entries: BTreeMap<String, VaultEntry>,
+    pub(crate) entries: HashMap<String, VaultEntry>,
 }
 
 impl Vault {

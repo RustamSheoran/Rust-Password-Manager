@@ -1,1 +1,15 @@
 /target
+/.codex
+
+# local vault/runtime data
+/db.json
+/db.json.backup-*
+/vault.json
+*.log
+
+# local environment files
+.env
+.env.*
+
+# editor / OS noise
+.DS_Store

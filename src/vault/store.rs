@@ -132,7 +132,7 @@ impl VaultStore {
             ciphertext: encode(&plaintext),
         };
 
-        let serialized = serde_json::to_vec_pretty(&blob)?;
+        let serialized = serde_json::to_vec(&blob)?;
         self.write_secure(&serialized)?;
         info!(path = %self.path.display(), entries = vault.len(), "saved vault");
 
@@ -355,6 +355,32 @@ mod tests {
             .load(Some(&SecretString::new("totally wrong".into())))
             .expect_err("load should fail");
         assert!(matches!(error, crate::error::AppError::WrongMasterPassword));
+    }
+
+    #[test]
+    fn saved_vault_does_not_contain_plaintext_secrets() {
+        let directory = tempdir().expect("tempdir");
+        let path = directory.path().join("vault.json");
+        let store = VaultStore::new(&path);
+        let master = SecretString::new("correct horse battery staple".into());
+
+        let mut vault = Vault::default();
+        vault
+            .add(
+                "example.com".into(),
+                "alice".into(),
+                SecretString::new("hunter2".into()),
+                false,
+                100,
+            )
+            .expect("add entry");
+
+        store.save(&master, &vault).expect("save vault");
+
+        let raw = std::fs::read_to_string(&path).expect("read vault");
+        assert!(!raw.contains("example.com"));
+        assert!(!raw.contains("alice"));
+        assert!(!raw.contains("hunter2"));
     }
 
     #[test]

@@ -29,7 +29,7 @@ pub fn execute(cli: Cli) -> Result<()> {
                 auto_lock_timeout: Duration::from_secs(cli.auto_lock_seconds.max(30)),
                 reveal_timeout: Duration::from_secs(8),
                 clipboard_timeout: Duration::from_secs(15),
-                ctrl_c_grace_period: Duration::from_secs(2),
+                ctrl_c_grace_period: Duration::from_secs(3),
             },
         ),
     }
