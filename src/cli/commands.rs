@@ -185,7 +185,7 @@ pub(crate) fn prompt_line(label: &str) -> Result<String> {
     Ok(buffer)
 }
 
-fn generate_password(length: usize, include_symbols: bool) -> Result<String> {
+pub(crate) fn generate_password(length: usize, include_symbols: bool) -> Result<String> {
     if length < 12 {
         return Err(AppError::Input(
             "generated passwords must be at least 12 characters".into(),
@@ -271,6 +271,8 @@ impl Session {
 
 #[cfg(test)]
 mod tests {
+    use crate::AppError;
+
     use super::generate_password;
 
     #[test]
@@ -281,5 +283,18 @@ mod tests {
         assert!(password.chars().any(|ch| ch.is_ascii_uppercase()));
         assert!(password.chars().any(|ch| ch.is_ascii_digit()));
         assert!(password.chars().any(|ch| !ch.is_ascii_alphanumeric()));
+    }
+
+    #[test]
+    fn generated_password_can_exclude_symbols() {
+        let password = generate_password(24, false).expect("generate password");
+
+        assert!(password.chars().all(|ch| ch.is_ascii_alphanumeric()));
+    }
+
+    #[test]
+    fn generated_password_rejects_too_short_lengths() {
+        let error = generate_password(8, true).expect_err("generation should fail");
+        assert!(matches!(error, AppError::Input(_)));
     }
 }

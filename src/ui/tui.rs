@@ -21,9 +21,12 @@ use ratatui::{
 use secrecy::{ExposeSecret, SecretString};
 
 use crate::{
-    cli::commands::unix_timestamp,
+    cli::commands::{generate_password, unix_timestamp},
     error::Result,
-    security::memory::{empty_secret, pop_secret_char, push_secret_char, secret_len, take_secret},
+    security::memory::{
+        empty_secret, pop_secret_char, push_secret_char, secret_from_string, secret_len,
+        take_secret,
+    },
     vault::{Vault, VaultStore},
 };
 
@@ -237,6 +240,10 @@ impl App {
             KeyCode::Esc => {
                 self.add_form = None;
                 self.status = "Add entry cancelled".into();
+            }
+            KeyCode::Char('g') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                form.password = secret_from_string(generate_password(24, true)?);
+                self.status = "Generated a 24-character password for the new entry".into();
             }
             KeyCode::Tab | KeyCode::Down => form.next_field(),
             KeyCode::BackTab | KeyCode::Up => form.previous_field(),
@@ -710,7 +717,7 @@ fn render_add_modal(frame: &mut Frame<'_>, form: &AddForm) {
         inner[2],
     );
     frame.render_widget(
-        Paragraph::new("Tab switches fields, Enter saves, Esc cancels")
+        Paragraph::new("Tab switches fields, Ctrl+G generates, Enter saves, Esc cancels")
             .style(Style::default().fg(Color::Gray)),
         inner[3],
     );

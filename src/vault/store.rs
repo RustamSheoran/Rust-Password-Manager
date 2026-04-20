@@ -311,6 +311,27 @@ mod tests {
     }
 
     #[test]
+    fn encrypted_vault_json_uses_expected_top_level_shape() {
+        let directory = tempdir().expect("tempdir");
+        let path = directory.path().join("vault.json");
+        let store = VaultStore::new(&path);
+        let master = SecretString::new("correct horse battery staple".into());
+
+        store.save(&master, &Vault::default()).expect("save vault");
+
+        let json: serde_json::Value =
+            serde_json::from_str(&std::fs::read_to_string(&path).expect("read vault"))
+                .expect("parse vault json");
+
+        assert_eq!(json["version"], 1);
+        assert!(json["kdf"].is_object());
+        assert!(json["salt"].is_string());
+        assert!(json["nonce"].is_string());
+        assert!(json["ciphertext"].is_string());
+        assert!(json.get("data").is_none());
+    }
+
+    #[test]
     fn wrong_master_password_is_rejected() {
         let directory = tempdir().expect("tempdir");
         let path = directory.path().join("vault.json");
