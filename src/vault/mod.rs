@@ -110,4 +110,46 @@ mod tests {
 
         assert!(matches!(error, crate::error::AppError::EntryExists(_)));
     }
+
+    #[test]
+    fn touch_updates_last_accessed_timestamp() {
+        let mut vault = Vault::default();
+        vault
+            .add(
+                "example.com".into(),
+                "alice".into(),
+                SecretString::new("one".into()),
+                false,
+                10,
+            )
+            .expect("add entry");
+
+        vault.touch("example.com", 99).expect("touch entry");
+
+        assert_eq!(
+            vault.get("example.com").expect("entry").last_accessed_at,
+            Some(99)
+        );
+    }
+
+    #[test]
+    fn delete_removes_entry() {
+        let mut vault = Vault::default();
+        vault
+            .add(
+                "example.com".into(),
+                "alice".into(),
+                SecretString::new("one".into()),
+                false,
+                10,
+            )
+            .expect("add entry");
+
+        vault.delete("example.com").expect("delete entry");
+
+        assert!(matches!(
+            vault.get("example.com"),
+            Err(crate::error::AppError::MissingEntry(_))
+        ));
+    }
 }

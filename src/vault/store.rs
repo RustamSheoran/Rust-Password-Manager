@@ -309,4 +309,68 @@ mod tests {
             12
         );
     }
+
+    #[test]
+    fn wrong_master_password_is_rejected() {
+        let directory = tempdir().expect("tempdir");
+        let path = directory.path().join("vault.json");
+        let store = VaultStore::new(&path);
+        let master = SecretString::new("correct horse battery staple".into());
+
+        let mut vault = Vault::default();
+        vault
+            .add(
+                "example.com".into(),
+                "alice".into(),
+                SecretString::new("hunter2".into()),
+                false,
+                100,
+            )
+            .expect("add entry");
+
+        store.save(&master, &vault).expect("save vault");
+
+        let error = store
+            .load(Some(&SecretString::new("totally wrong".into())))
+            .expect_err("load should fail");
+        assert!(matches!(error, crate::error::AppError::WrongMasterPassword));
+    }
+
+    #[test]
+    fn legacy_custom_crypto_is_rejected() {
+        let directory = tempdir().expect("tempdir");
+        let path = directory.path().join("vault.json");
+        std::fs::write(&path, r#"{"salt":"00","check":"11","data":"22"}"#)
+            .expect("write legacy file");
+
+        let store = VaultStore::new(&path);
+        assert_eq!(
+            store.status().expect("status"),
+            VaultStatus::UnsupportedLegacyEncrypted
+        );
+        assert!(matches!(
+            store.load(Some(&SecretString::new("master".into()))),
+            Err(crate::error::AppError::UnsupportedLegacy(_))
+        ));
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn vault_file_permissions_are_owner_only() {
+        use std::os::unix::fs::PermissionsExt;
+
+        let directory = tempdir().expect("tempdir");
+        let path = directory.path().join("vault.json");
+        let store = VaultStore::new(&path);
+        let master = SecretString::new("correct horse battery staple".into());
+
+        store.save(&master, &Vault::default()).expect("save vault");
+
+        let permissions = std::fs::metadata(&path)
+            .expect("metadata")
+            .permissions()
+            .mode()
+            & 0o777;
+        assert_eq!(permissions, 0o600);
+    }
 }
