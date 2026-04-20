@@ -4,12 +4,8 @@
 
 ## Demo
 
-Inline preview:
-
-[![Pass Manager demo preview](assets/readme/demo.gif)](assets/readme/demo.mp4)
-
-Full video:
-[demo.mp4](assets/readme/demo.mp4)
+Demo recording:
+[demo.webm](assets/readme/demo.webm)
 
 ### Screenshots
 
@@ -173,8 +169,7 @@ The plaintext vault itself is serialized JSON and encrypted as one AEAD payload.
 assets/
   readme/
     cargo-test-passing.png
-    demo.gif
-    demo.mp4
+    demo.webm
     master-password-prompt.png
     tui-hidden-password.png
     tui-revealed-password.png
