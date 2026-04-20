@@ -4,12 +4,12 @@
 
 ## Demo
 
-Watch the demo:
-[demo.mp4](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/demo.mp4)
+Inline preview:
 
-Click the image below to open the video:
+[![Pass Manager demo preview](assets/readme/demo.gif)](assets/readme/demo.mp4)
 
-[![Pass Manager demo](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/tui-hidden-password.png)](https://raw.githubusercontent.com/RustamSheoran/Rust-Password-Manager/main/assets/readme/demo.mp4)
+Full video:
+[demo.mp4](assets/readme/demo.mp4)
 
 ### Screenshots
 
@@ -173,6 +173,7 @@ The plaintext vault itself is serialized JSON and encrypted as one AEAD payload.
 assets/
   readme/
     cargo-test-passing.png
+    demo.gif
     demo.mp4
     master-password-prompt.png
     tui-hidden-password.png
